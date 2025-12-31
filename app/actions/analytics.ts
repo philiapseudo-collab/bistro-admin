@@ -128,7 +128,7 @@ export async function getTopSellingItems() {
     // Combine data
     const result = top5MenuIds
       .map((menuId) => {
-        const menu = menus.find((m) => m.id === menuId);
+        const menu = menus.find((m: { id: number; name: string }) => m.id === menuId);
         return {
           name: menu?.name || `Item #${menuId}`,
           quantity: grouped[menuId],
