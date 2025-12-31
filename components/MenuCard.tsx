@@ -5,7 +5,16 @@ import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent }
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { toggleStock, updatePrice } from "@/app/actions/menu";
-import type { Menu } from "@prisma/client";
+
+type Menu = {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  description: string | null;
+  subcategory: string | null;
+};
 
 interface MenuCardProps {
   menuItem: Menu;

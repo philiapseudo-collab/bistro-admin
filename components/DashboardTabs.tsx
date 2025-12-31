@@ -5,10 +5,30 @@ import { MenuList } from "@/components/MenuList";
 import { FeedbackList } from "@/components/FeedbackList";
 import { RevenueCard } from "@/components/analytics/RevenueCard";
 import { TopItemsChart } from "@/components/analytics/TopItemsChart";
-import type { Menu, Feedback } from "@prisma/client";
+
+type Menu = {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  description: string | null;
+  subcategory: string | null;
+};
+
+type Feedback = {
+  id: string;
+  createdAt: Date;
+  rating: number;
+  message: string;
+  type: string;
+  status: string;
+  tableNumber: string | null;
+  waiterName: string | null;
+};
 
 interface DashboardTabsProps {
-  menuItems: (Menu & { price: number })[];
+  menuItems: Menu[];
   feedbackItems: Feedback[];
   dailyRevenue: string;
   topItems: { name: string; quantity: number }[];

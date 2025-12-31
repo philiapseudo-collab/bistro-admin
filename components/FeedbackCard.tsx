@@ -5,8 +5,18 @@ import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { resolveFeedback } from "@/app/actions/feedback";
-import type { Feedback } from "@prisma/client";
 import { Star } from "lucide-react";
+
+type Feedback = {
+  id: string;
+  createdAt: Date;
+  rating: number;
+  message: string;
+  type: string;
+  status: string;
+  tableNumber: string | null;
+  waiterName: string | null;
+};
 
 interface FeedbackCardProps {
   feedback: Feedback;

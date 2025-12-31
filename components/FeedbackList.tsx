@@ -3,8 +3,18 @@
 import { useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeedbackCard } from "@/components/FeedbackCard";
-import type { Feedback } from "@prisma/client";
 import { MessageSquareOff } from "lucide-react";
+
+type Feedback = {
+  id: string;
+  createdAt: Date;
+  rating: number;
+  message: string;
+  type: string;
+  status: string;
+  tableNumber: string | null;
+  waiterName: string | null;
+};
 
 interface FeedbackListProps {
   feedbackItems: Feedback[];

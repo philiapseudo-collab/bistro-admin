@@ -3,7 +3,16 @@
 import { useState, useMemo } from "react";
 import { MenuCard } from "@/components/MenuCard";
 import { MenuSearch } from "@/components/MenuSearch";
-import type { Menu } from "@prisma/client";
+
+type Menu = {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+  description: string | null;
+  subcategory: string | null;
+};
 
 interface MenuListProps {
   menuItems: Menu[];
