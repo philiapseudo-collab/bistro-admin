@@ -45,7 +45,7 @@ export async function getDailyRevenue() {
       },
     });
 
-    const total = orders.reduce((sum: number, order) => {
+    const total = orders.reduce((sum: number, order: { totalAmount: unknown }) => {
       return sum + Number(order.totalAmount);
     }, 0);
 
