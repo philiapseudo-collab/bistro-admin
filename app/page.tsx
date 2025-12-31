@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { DashboardTabs } from "@/components/DashboardTabs";
 import { db } from "@/lib/db";
 import { getDailyRevenue, getTopSellingItems } from "@/app/actions/analytics";
+import type { Menu } from "@prisma/client";
 
 export default async function Home() {
   let menuItems = [];
@@ -17,7 +18,7 @@ export default async function Home() {
     });
     
     // Convert Decimal to number for client components
-    menuItems = items.map((item) => ({
+    menuItems = items.map((item: Menu) => ({
       ...item,
       price: Number(item.price),
     }));
