@@ -3,7 +3,7 @@ import { DashboardTabs } from "@/components/DashboardTabs";
 import { db } from "@/lib/db";
 import { getDailyRevenue, getTopSellingItems } from "@/app/actions/analytics";
 
-type MenuItem = Awaited<ReturnType<typeof db.menu.findMany>>[number] & { price: number };
+type MenuItem = Omit<Awaited<ReturnType<typeof db.menu.findMany>>[number], 'price'> & { price: number };
 type FeedbackItem = Awaited<ReturnType<typeof db.feedback.findMany>>[number];
 
 export default async function Home() {
