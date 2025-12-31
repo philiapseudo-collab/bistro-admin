@@ -97,7 +97,7 @@ export async function getTopSellingItems() {
     });
 
     // Group by menuId and sum quantities
-    const grouped = orderItems.reduce((acc, item) => {
+    const grouped = orderItems.reduce((acc: Record<number, number>, item: { menuId: number; quantity: number }) => {
         const menuId = item.menuId;
         if (!acc[menuId]) {
           acc[menuId] = 0;
