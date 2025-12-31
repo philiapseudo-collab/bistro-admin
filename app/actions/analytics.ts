@@ -108,7 +108,7 @@ export async function getTopSellingItems() {
 
     // Get top 5 by quantity
     const top5MenuIds = Object.entries(grouped)
-      .sort(([, a], [, b]) => b - a)
+      .sort(([, a]: [string, number], [, b]: [string, number]) => b - a)
       .slice(0, 5)
       .map(([menuId]) => parseInt(menuId));
 
