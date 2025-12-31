@@ -3,9 +3,12 @@ import { DashboardTabs } from "@/components/DashboardTabs";
 import { db } from "@/lib/db";
 import { getDailyRevenue, getTopSellingItems } from "@/app/actions/analytics";
 
+type MenuItem = Awaited<ReturnType<typeof db.menu.findMany>>[number] & { price: number };
+type FeedbackItem = Awaited<ReturnType<typeof db.feedback.findMany>>[number];
+
 export default async function Home() {
-  let menuItems = [];
-  let feedbackItems = [];
+  let menuItems: MenuItem[] = [];
+  let feedbackItems: FeedbackItem[] = [];
   let dailyRevenue = "KES 0";
   let topItems: { name: string; quantity: number }[] = [];
   let error = null;
