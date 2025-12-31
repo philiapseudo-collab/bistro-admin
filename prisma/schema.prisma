@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Menu {
+  id          Int         @id @default(autoincrement())
+  name        String
+  category    String
+  price       Decimal
+  stock       Int
+  description String?
+  subcategory String?
+  OrderItem   OrderItem[]
+
+  @@index([category], map: "idx_menu_category")
+  @@index([description(ops: raw("gin_trgm_ops"))], map: "idx_menu_description_trgm", type: Gin)
+  @@index([name(ops: raw("gin_trgm_ops"))], map: "idx_menu_name_trgm", type: Gin)
+  @@index([subcategory], map: "idx_menu_subcategory")
+}
+
+model Order {
+  id                String      @id @db.Uuid
+  tableNumber       String
+  totalAmount       Decimal
+  createdAt         DateTime    @default(now())
+  status            String      @default("PENDING")
+  paymentProvider   String      @default("PESAPAL")
+  paymentReference  String?
+  pesapalTrackingId String?
+  notes             String?
+  OrderItem         OrderItem[]
+
+  @@index([createdAt(sort: Desc)], map: "idx_order_created")
+  @@index([tableNumber, status], map: "idx_order_table_status")
+}
+
+model OrderItem {
+  orderId  String @db.Uuid
+  menuId   Int
+  quantity Int
+  Menu     Menu   @relation(fields: [menuId], references: [id])
+  Order    Order  @relation(fields: [orderId], references: [id])
+
+  @@id([orderId, menuId])
+  @@index([menuId], map: "idx_order_item_menu")
+  @@index([orderId], map: "idx_order_item_order")
+}
+
+model Session {
+  phoneNumber       String  @id
+  tableNumber       String?
+  cart              Json    @default("[]")
+  status            String  @default("INITIAL")
+  activeCategory    String?
+  activePage        Int     @default(1)
+  lastSearchTerm    String?
+  activeSubcategory String?
+  filterMinPrice    Int?
+  filterMaxPrice    Int?
+  isPriceFiltering  Boolean @default(false)
+
+  @@index([phoneNumber], map: "idx_session_phone")
+  @@index([tableNumber, status], map: "idx_session_table_status")
+}
+
+model Feedback {
+  id          String   @id @default(uuid()) @db.Uuid
+  createdAt   DateTime @default(now())
+  rating      Int
+  message     String
+  type        String
+  status      String   @default("PENDING")
+  tableNumber String?
+  waiterName  String?
+
+  @@index([createdAt(sort: Desc)], map: "idx_feedback_created")
+  @@index([status], map: "idx_feedback_status")
+}
