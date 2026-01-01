@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 // Define allowed email addresses (owner-only access)
 const ALLOWED_EMAILS = [
@@ -9,10 +10,17 @@ const ALLOWED_EMAILS = [
 
 export async function EmailGuard({ children }: { children: React.ReactNode }) {
   const user = await currentUser();
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
 
   // If no user, let the proxy handle redirect to sign-in
   // Email check only runs for authenticated users
   if (!user) {
+    return <>{children}</>;
+  }
+
+  // Skip email check if already on unauthorized, sign-in, or sign-up pages to prevent redirect loop
+  if (pathname === "/unauthorized" || pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up")) {
     return <>{children}</>;
   }
 

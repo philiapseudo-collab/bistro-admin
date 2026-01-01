@@ -10,10 +10,13 @@ const isPublicRoute = createRouteMatcher([
 
 const authMiddleware = clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
+  const pathname = req.nextUrl.pathname;
 
   // Allow public routes
   if (isPublicRoute(req)) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    response.headers.set("x-pathname", pathname);
+    return response;
   }
 
   // If not authenticated, redirect to sign-in
@@ -22,7 +25,9 @@ const authMiddleware = clerkMiddleware(async (auth, req) => {
   }
 
   // Email whitelist check is handled in server components (see components/EmailGuard.tsx)
-  return NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set("x-pathname", pathname);
+  return response;
 });
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
