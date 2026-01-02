@@ -9,9 +9,9 @@ type Feedback = {
   id: string;
   createdAt: Date;
   rating: number;
-  message: string;
-  type: string;
-  status: string;
+  message: string | null;
+  type: string | null;
+  status: string | null;
   tableNumber: string | null;
   waiterName: string | null;
 };

@@ -11,9 +11,9 @@ type Feedback = {
   id: string;
   createdAt: Date;
   rating: number;
-  message: string;
-  type: string;
-  status: string;
+  message: string | null;
+  type: string | null;
+  status: string | null;
   tableNumber: string | null;
   waiterName: string | null;
 };
@@ -73,7 +73,7 @@ export function FeedbackCard({ feedback }: FeedbackCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-zinc-900 dark:text-zinc-50">{feedback.message}</p>
+        <p className="text-zinc-900 dark:text-zinc-50">{feedback.message || ""}</p>
       </CardContent>
       <CardFooter className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export function FeedbackCard({ feedback }: FeedbackCardProps) {
               Waiter: {feedback.waiterName}
             </Badge>
           )}
-          {isComplaint && (
+          {isComplaint && feedback.type && (
             <Badge
               variant={feedback.status === "PENDING" ? "destructive" : "secondary"}
               className="text-xs"
