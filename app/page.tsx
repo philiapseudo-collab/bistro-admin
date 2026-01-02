@@ -25,8 +25,12 @@ export default async function Home() {
       price: Number(item.price),
     }));
 
-    // Fetch all feedback ordered by creation date (newest first)
+    // Fetch admin dashboard feedback only (where message is not null)
+    // This filters out chatbot entries which use 'comment' instead of 'message'
     feedbackItems = await db.feedback.findMany({
+      where: {
+        message: { not: null },
+      },
       orderBy: { createdAt: "desc" },
     });
 
