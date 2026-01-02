@@ -27,9 +27,11 @@ export function FeedbackList({ feedbackItems }: FeedbackListProps) {
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
     return feedbackItems.filter((item) => {
-      if (item.type === "COMPLAINT" && item.status === "PENDING") {
+      // Pending complaints (admin entries with PENDING status, or chatbot entries with null status)
+      if (item.type === "COMPLAINT" && (item.status === "PENDING" || item.status === null)) {
         return true;
       }
+      // Recent compliments (within 24h)
       if (
         item.type === "COMPLIMENT" &&
         new Date(item.createdAt) >= twentyFourHoursAgo
@@ -46,9 +48,11 @@ export function FeedbackList({ feedbackItems }: FeedbackListProps) {
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
     return feedbackItems.filter((item) => {
+      // Resolved complaints (only admin entries can be resolved)
       if (item.type === "COMPLAINT" && item.status === "RESOLVED") {
         return true;
       }
+      // Older compliments (beyond 24h)
       if (
         item.type === "COMPLIMENT" &&
         new Date(item.createdAt) < twentyFourHoursAgo

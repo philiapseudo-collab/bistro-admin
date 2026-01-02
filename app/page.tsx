@@ -25,13 +25,25 @@ export default async function Home() {
       price: Number(item.price),
     }));
 
-    // Fetch admin dashboard feedback only (where message is not null)
-    // This filters out chatbot entries which use 'comment' instead of 'message'
-    feedbackItems = await db.feedback.findMany({
-      where: {
-        message: { not: null },
-      },
+    // Fetch all feedback (both admin and chatbot entries)
+    const allFeedback = await db.feedback.findMany({
       orderBy: { createdAt: "desc" },
+    });
+
+    // Transform feedback to unified format for components
+    // Chatbot entries use 'comment' (or no comment), admin entries use 'message'
+    feedbackItems = allFeedback.map((item) => {
+      // If it's a chatbot entry (no message field), transform it
+      if (!item.message) {
+        return {
+          ...item,
+          message: item.comment || `Customer rated ${item.rating} star${item.rating !== 1 ? 's' : ''}`, // Use comment or default message
+          type: item.rating <= 3 ? "COMPLAINT" : "COMPLIMENT", // Derive type from rating
+          status: null, // Chatbot entries don't have status
+        };
+      }
+      // Admin entries already have message, type, status
+      return item;
     });
 
     // Fetch analytics data
