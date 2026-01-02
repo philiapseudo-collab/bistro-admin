@@ -34,7 +34,6 @@ model Order {
   notes               String?
   feedbackRequestSent Boolean     @default(false)
   updatedAt           DateTime    @default(now())
-  Feedback            Feedback[]
   OrderItem           OrderItem[]
 
   @@index([createdAt(sort: Desc)], map: "idx_order_created")
@@ -71,15 +70,15 @@ model Session {
 }
 
 model Feedback {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  orderId     String?  @db.Uuid
-  phoneNumber String
-  rating      Int
-  comment     String?
+  id          String   @id @default(uuid()) @db.Uuid
   createdAt   DateTime @default(now())
-  Order       Order?   @relation(fields: [orderId], references: [id])
+  rating      Int
+  message     String
+  type        String
+  status      String   @default("PENDING")
+  tableNumber String?
+  waiterName  String?
 
-  @@index([createdAt])
-  @@index([orderId])
-  @@index([phoneNumber])
+  @@index([createdAt(sort: Desc)], map: "idx_feedback_created")
+  @@index([status], map: "idx_feedback_status")
 }
